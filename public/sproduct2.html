@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Denim Jacket - Product View</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+      width: 100%;
+    }
+
+    .centered-logo img {
+      width: 100px;
+      max-width: 100%;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      color: #000000;
+      text-align: center;
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      max-width: 100%;
+      width: 100%;
+    }
+
+    .image-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto 20px;
+    }
+
+    .main-img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 32px;
+      color: rgba(0, 0, 0, 0.7);
+      cursor: pointer;
+      user-select: none;
+      z-index: 1;
+      display: none;
+    }
+
+    .arrow-right {
+      right: 10px;
+    }
+
+    .image-wrapper:hover .arrow-right {
+      display: block;
+    }
+
+    .buy-btn {
+      background-color: #ffffff;
+      color: #000000;
+      border: 2px solid #000000;
+      padding: 10px 40px;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .buy-btn:hover {
+      background-color: #000000;
+      color: #ffffff;
+    }
+
+    /* Sold Button */
+    .sold-btn {
+      background-color: #e0e0e0;
+      color: #9e9e9e;
+      border: 2px solid #9e9e9e;
+      padding: 10px 40px;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: not-allowed;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    /* Disabled Sold Button */
+    .sold-btn:disabled {
+      background-color: #e0e0e0;
+      color: #9e9e9e;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .arrow {
+        font-size: 26px;
+      }
+
+      .buy-btn,
+      .sold-btn {
+        font-size: 16px;
+        padding: 8px 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="centered-logo">
+      <img src="https://lh3.googleusercontent.com/d/1XkQhPhm6zUuAccr5bS0sZL4HbIh29Kx0" alt="GADzooks Logo" />
+    </div>
+  </header>
+
+  <div class="content">
+    <h1>STREET-KNIT</h1>
+
+    <div class="image-wrapper">
+    </div>
+    <button class="buy-btn" onclick="location.href='payment.html'">BUY NOW</button>
+  </div>
+
+  <script>
+    const mediaItems = [
+      "media/11S.jpg",
+      "media/12s.jpg",
+      "media/13s.jpg",
+      "media/14s.jpg",
+      "media/15s.mov" 
+    ];
+  
+    let currentIndex = 0;
+    const wrapper = document.querySelector(".image-wrapper");
+  
+    function showMedia(index) {
+      const current = mediaItems[index];
+  
+      // Clear previous content
+      wrapper.innerHTML = '';
+  
+      if (current.endsWith(".mov")) {
+        const video = document.createElement("video");
+        video.src = current;
+        video.autoplay = true;
+        video.loop = true;
+        video.muted = true;
+        video.playsInline = true;
+        video.className = "main-img";
+        wrapper.appendChild(video);
+      } else {
+        const img = document.createElement("img");
+        img.src = current;
+        img.className = "main-img";
+        img.alt = "Street-Knit";
+        wrapper.appendChild(img);
+  
+        const arrow = document.createElement("span");
+        arrow.className = "arrow arrow-right";
+        arrow.innerHTML = "→";
+        arrow.onclick = nextMedia;
+        wrapper.appendChild(arrow);
+      }
+    }
+  
+    function nextMedia() {
+      currentIndex = (currentIndex + 1) % mediaItems.length;
+      showMedia(currentIndex);
+    }
+  
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") nextMedia();
+    });
+  
+    let touchStartX = 0;
+    let touchEndX = 0;
+  
+    wrapper.addEventListener("touchstart", (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+  
+    wrapper.addEventListener("touchend", (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchEndX < touchStartX - 50) nextMedia();
+    });
+  
+    // Initial display
+    showMedia(currentIndex);
+  </script>
+</body>
+</html>
